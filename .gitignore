@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Project-specific
+*.pkl
+*.log
+results/*/*.xlsx
+results/*/*.pkl
+results/*/*.csv
+!results/*/.gitkeep
+!results/README.md
+
+# User-provided data (not tracked in git)
+data/
+
+# WorkBuddy / tool configs
+.workbuddy/
+
+# Temp / debug outputs
+quick_out.txt
+quick_err.txt
+test_output.txt
+test_result.txt
+test_result_err.txt
+test_stderr.txt
+test_stdout.txt
+test_full_result.txt
+test_full_result_err.txt
+test_sobol_result.txt
+spsolve_result.txt
+sobol_debug.txt
+init_db.log
