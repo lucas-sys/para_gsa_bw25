@@ -8,6 +8,8 @@
 
 基于 [Brightway2.5](https://brightway.dev/)、[SALib](https://salib.readthedocs.io/) 和 Python 多进程的模块化 **参数扰动生命周期评价（LCA）** 与 **全局敏感性分析（GSA）** 工具包。
 
+该工具包基于Rebecca Belfiore、Christhel Andrade Diaz和刘威尔的工作开发。过程中使用了Code X来提高代码效率，使用WorkBuddy组织所有文件。
+
 ## 功能特性
 
 - **确定性 LCA** -- 计算多个功能单元和影响类别的基准环境影响分数
