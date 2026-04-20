@@ -1,3 +1,9 @@
+## 贡献者
+
+<a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" />
+</a>
+
 # LCA 全局敏感性分析（GSA）工具包
 
 基于 [Brightway2.5](https://brightway.dev/)、[SALib](https://salib.readthedocs.io/) 和 Python 多进程的模块化 **参数扰动生命周期评价（LCA）** 与 **全局敏感性分析（GSA）** 工具包。
