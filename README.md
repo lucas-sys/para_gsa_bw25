@@ -1,7 +1,7 @@
 ## Contributors
 
 <a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" />
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25"/>
 </a>
 
 # LCA Global Sensitivity Analysis (GSA) Toolkit
