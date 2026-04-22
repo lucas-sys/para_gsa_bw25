@@ -1,6 +1,14 @@
+## Contributors
+
+<a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25"/>
+</a>
+
 # LCA Global Sensitivity Analysis (GSA) Toolkit
 
 A modular Python toolkit for performing **parameter-perturbation Life Cycle Assessment (LCA)** with **Global Sensitivity Analysis (GSA)**, built on [Brightway2.5](https://brightway.dev/), [SALib](https://salib.readthedocs.io/), and Python multiprocessing.
+
+This toolkit was developed in collaboration by Rebecca Belfiore, Christhel Andrade Diaz, Weier Liu and Nanlin Liao. Code X was used to improve the code efficiency, and WorkBuddy was used to organize all files. 
 
 ## Features
 
@@ -186,7 +194,7 @@ Open `gsa_workflow.ipynb` and run cells sequentially. The notebook covers the co
 
 ## Multiprocessing
 
-Both Monte Carlo and Sobol evaluations use Python's `spawn` multiprocessing context for Windows compatibility. Each worker independently loads the Brightway project and databases, so memory usage scales with worker count. Recommended: 2-4 workers.
+To speed up Monte Carlo and Sobol analyses, the toolkit can run tasks in parallel using multiple CPU cores. 
 
 ## License
 

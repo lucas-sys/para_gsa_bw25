@@ -1,6 +1,17 @@
+## 贡献者
+=======
+
+<a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" />
+</a>
+
 # LCA 全局敏感性分析（GSA）工具包
 
 基于 [Brightway2.5](https://brightway.dev/)、[SALib](https://salib.readthedocs.io/) 和 Python 多进程的模块化 **参数扰动生命周期评价（LCA）** 与 **全局敏感性分析（GSA）** 工具包。
+
+
+
+该工具包基于Rebecca Belfiore、Christhel Andrade Diaz和刘威尔的工作开发。过程中使用了Code X来提高代码效率，使用WorkBuddy组织所有文件。
 
 ## 功能特性
 
@@ -36,12 +47,20 @@
 │   ├── sensitivity_oat/              # OAT 敏感性结果
 │   ├── sensitivity_analytical/       # 解析方差结果
 │   ├── monte_carlo/                  # 蒙特卡洛结果
+<<<<<<< HEAD
 |   ├── sobol/                        # Sobol GSA 结果
 │   └── fast/                         # Fast GSA 结果
 ├── gsa_workflow.ipynb                # 交互式 Notebook（完整工作流）
 ├── init_databases.py                 # 数据库初始化脚本
 ├── test_full_workflow.py             # 端到端测试
 ├── test_run.py   c                    # 快速验证测试
+=======
+│   └── sobol/                        # Sobol GSA 结果
+├── gsa_workflow.ipynb                # 交互式 Notebook（完整工作流）
+├── init_databases.py                 # 数据库初始化脚本
+├── test_full_workflow.py             # 端到端测试
+├── test_run.py                       # 快速验证测试
+>>>>>>> 5859e69832468470c53411abd9c153917b11d491
 ├── test_sobol_only.py                # Sobol 专项测试
 ├── requirements.txt
 ├── LICENSE
@@ -118,7 +137,6 @@ GROUP_NAME = 'your_parameter_group'
 set_project(PROJECT_NAME)
 db = bd.Database(FOREGROUND_DB)
 fu = [db.get(code='your_fu_code')]
-
 methods = [
     ('your_ecoinvent_db', 'EF v3.1', 'climate change',
      'global warming potential (GWP100)'),
@@ -209,6 +227,7 @@ result = lca_fast.run_full_fast_workflow(
     n_workers=2,
     method='rbd_fast',  # or 'fast'
 )
+
 ```
 
 ### Jupyter Notebook
@@ -229,6 +248,7 @@ result = lca_fast.run_full_fast_workflow(
 | 7   | 蒙特卡洛模拟              | `results/monte_carlo/`            |
 | 8   | Sobol GSA           | `results/sobol/`                  |
 | 10  | FAST / RBD-FAST GSA | `results/fast/`                   |
+
 
 ## 支持的不确定性分布
 
@@ -276,6 +296,8 @@ result = lca_fast.run_full_fast_workflow(
 | `fast_indices_from_results(...)`                | 计算 FAST / RBD-FAST 灵敏度指数          |
 | `fast_indices_to_dataframe(Si, problem)`        | 转为整洁 DataFrame                    |
 | `run_full_fast_workflow(...)`                   | 一键工作流（构建→采样→评估）                   |
+
+
 
 ## 多进程
 
