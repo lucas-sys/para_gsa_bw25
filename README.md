@@ -1,14 +1,18 @@
 ## Contributors
 
 <a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25"/>
+  <img src="https://img.shields.io/github/contributors/lucas-sys/para_gsa_bw25?style=for-the-badge&logo=github" alt="Contributors"/>
+</a>
+
+<a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="Contributors" width="400"/>
 </a>
 
 # LCA Global Sensitivity Analysis (GSA) Toolkit
 
 A modular Python toolkit for performing **parameter-perturbation Life Cycle Assessment (LCA)** with **Global Sensitivity Analysis (GSA)**, built on [Brightway2.5](https://brightway.dev/), [SALib](https://salib.readthedocs.io/), and Python multiprocessing.
 
-This toolkit was developed in collaboration by Rebecca Belfiore, Christhel Andrade Diaz, Weier Liu and Nanlin Liao. Code X was used to improve the code efficiency, and WorkBuddy was used to organize all files. 
+This toolkit was developed in collaboration by Rebecca Belfiore, Christhel Andrade Diaz, Weier Liu and Nanlin Liao. Code X was used to improve the code efficiency, and WorkBuddy was used to organize all files.
 
 ## Features
 
@@ -19,6 +23,7 @@ This toolkit was developed in collaboration by Rebecca Belfiore, Christhel Andra
 - **Analytical Variance** -- Variance decomposition from uncertainty metadata (13 distribution types)
 - **Monte Carlo Simulation** -- Parallel stochastic sampling with configurable worker count
 - **Sobol GSA** -- First-order (S1) and total-order (ST) Sobol indices via SALib with parallel evaluation
+- **FAST / RBD-FAST GSA** -- Global sensitivity analysis via Fourier Amplitude Sensitivity Test (FAST) and its Random Balance Designs variant (RBD-FAST), with parallel evaluation
 
 ## Project Structure
 
@@ -33,17 +38,18 @@ This toolkit was developed in collaboration by Rebecca Belfiore, Christhel Andra
 │   ├── lca_contribution.py           # Contribution analysis, OAT, analytical variance
 │   ├── lca_monte_carlo.py            # Monte Carlo sampling & parallel evaluation
 │   ├── lca_sobol.py                  # Sobol GSA (build, sample, evaluate, analyze)
+│   ├── lca_fast.py                   # FAST / RBD-FAST GSA (build, sample, evaluate, analyze)
 │   └── lca_gsa_helper.py             # Backward-compatible re-export layer
 ├── data/                             # Input databases (user-provided)
 │   └── ...                           # Place your Excel database files here
 ├── results/                          # Output files (organized by analysis type)
-│   ├── deterministic/
-│   ├── contribution/
-│   ├── sensitivity_oat/
-│   ├── sensitivity_analytical/
-│   ├── monte_carlo/
-│   ├── sobol/
-|   └── fast/
+│   ├── deterministic/                # Deterministic LCA results
+│   ├── contribution/                 # Contribution analysis results
+│   ├── sensitivity_oat/              # OAT sensitivity results
+│   ├── sensitivity_analytical/       # Analytical variance results
+│   ├── monte_carlo/                  # Monte Carlo results
+│   ├── sobol/                        # Sobol GSA results
+│   └── fast/                         # FAST / RBD-FAST GSA results
 ├── gsa_workflow.ipynb                # Interactive notebook (full workflow)
 ├── init_databases.py                 # Database initialization script
 ├── test_full_workflow.py             # End-to-end test
@@ -155,11 +161,71 @@ sobol_results = run_parallel_sobol_from_samples(
     sobol_samples=samples,
     n_workers=2,
 )
+
+# FAST / RBD-FAST GSA
+from utils import lca_fast
+
+fast_problem, fast_params = lca_fast.build_fast_problem(GROUP_NAME)
+
+# --- Classic FAST (S1 only, fewer samples) ---
+fast_samples = lca_fast.generate_fast_samples(fast_problem, M=4, method='fast')
+fast_results = lca_fast.run_parallel_fast_from_samples(
+    project_name=PROJECT_NAME,
+    group_name=GROUP_NAME,
+    functional_units=fu,
+    methods=methods,
+    fast_problem=fast_problem,
+    fast_samples=fast_samples,
+    n_workers=2,
+)
+Si_fast = lca_fast.fast_indices_from_results(
+    fast_problem=fast_problem,
+    fast_results_df=fast_results,
+    functional_unit=fu[0]['name'],
+    method=methods[0],
+    fast_samples=fast_samples,
+    M=4,
+    analysis_method='fast',
+)
+df_fast = lca_fast.fast_indices_to_dataframe(Si_fast, fast_problem, analysis_method='fast')
+
+# --- RBD-FAST (S1 + ST) ---
+rbd_samples = lca_fast.generate_fast_samples(fast_problem, M=4, method='rbd_fast', seed=42)
+rbd_results = lca_fast.run_parallel_fast_from_samples(
+    project_name=PROJECT_NAME,
+    group_name=GROUP_NAME,
+    functional_units=fu,
+    methods=methods,
+    fast_problem=fast_problem,
+    fast_samples=rbd_samples,
+    n_workers=2,
+)
+Si_rbd = lca_fast.fast_indices_from_results(
+    fast_problem=fast_problem,
+    fast_results_df=rbd_results,
+    functional_unit=fu[0]['name'],
+    method=methods[0],
+    fast_samples=rbd_samples,
+    M=4,
+    analysis_method='rbd_fast',
+)
+df_rbd = lca_fast.fast_indices_to_dataframe(Si_rbd, fast_problem, analysis_method='rbd_fast')
+
+# One-click workflow
+result = lca_fast.run_full_fast_workflow(
+    project_name=PROJECT_NAME,
+    group_name=GROUP_NAME,
+    functional_units=fu,
+    methods=methods,
+    M=4,
+    n_workers=2,
+    method='rbd_fast',  # or 'fast'
+)
 ```
 
 ### In Jupyter Notebook
 
-Open `gsa_workflow.ipynb` and run cells sequentially. The notebook covers the complete workflow from database setup through Sobol GSA. Before running, update the configuration cells with your project-specific values.
+Open `gsa_workflow.ipynb` and run cells sequentially. The notebook covers the complete workflow from database setup through Sobol and FAST GSA. Before running, update the configuration cells with your project-specific values.
 
 ## Workflow Sections
 
@@ -174,6 +240,7 @@ Open `gsa_workflow.ipynb` and run cells sequentially. The notebook covers the co
 | 6       | Analytical variance       | `results/sensitivity_analytical/` |
 | 7       | Monte Carlo simulation    | `results/monte_carlo/`            |
 | 8       | Sobol GSA                 | `results/sobol/`                  |
+| 10      | FAST / RBD-FAST GSA       | `results/fast/`                   |
 
 ## Supported Uncertainty Distributions
 
@@ -192,9 +259,39 @@ Open `gsa_workflow.ipynb` and run cells sequentially. The notebook covers the co
 | 11   | Gumbel (GEV)     | shape (xi), loc, scale                   |
 | 12   | Student-t        | shape (df), loc, scale                   |
 
+## FAST / RBD-FAST GSA
+
+| Variant   | Function            | Indices | Sample size formula | Notes                                    |
+| --------- | ------------------- | ------- | ------------------- | ---------------------------------------- |
+| Classic FAST | `method='fast'`  | S1      | `(4M²+1)·k`         | Deterministic, first-order only, low sample cost |
+| RBD-FAST  | `method='rbd_fast'` | S1 + ST | `≥65·k`             | Random, first + total order, Latin hypercube sampling |
+
+where `k` = number of uncertain parameters, `M` = interference factor (recommended default: 4).
+
+**Comparison with Sobol**
+
+| Method       | S1  | ST  | Min. recommended samples | When to use                       |
+| ------------ | --- | --- | ------------------------ | --------------------------------- |
+| Sobol        | ✓   | ✓   | `N·(k+2)`                | Standard full GSA                 |
+| Classic FAST | ✓   | ✗   | `(4M²+1)·k`              | S1 only, tight sample budget      |
+| RBD-FAST     | ✓   | ✓   | `65·k`                   | S1 + ST at lower cost than Sobol  |
+
+Key API:
+
+| Function                                        | Description                                        |
+| ----------------------------------------------- | -------------------------------------------------- |
+| `build_fast_problem(group)`                     | Build SALib problem dict from ActivityParameters   |
+| `sanitize_fast_problem(problem)`                | Validate and repair invalid parameter bounds       |
+| `generate_fast_samples(problem, M, method)`     | Generate FAST / RBD-FAST sample matrix             |
+| `expected_fast_sample_rows(problem, M, method)` | Predict number of sample rows                      |
+| `run_parallel_fast_from_samples(...)`           | Evaluate sample matrix with multiple workers       |
+| `fast_indices_from_results(...)`                | Compute FAST / RBD-FAST sensitivity indices        |
+| `fast_indices_to_dataframe(Si, problem)`        | Convert indices to a tidy DataFrame                |
+| `run_full_fast_workflow(...)`                   | One-click workflow (build → sample → evaluate)     |
+
 ## Multiprocessing
 
-To speed up Monte Carlo and Sobol analyses, the toolkit can run tasks in parallel using multiple CPU cores. 
+Monte Carlo, Sobol, and FAST evaluations all use Python's `spawn` multiprocessing context to ensure Windows compatibility. Each worker process independently loads the Brightway project and databases, so memory usage scales with the number of workers. 2–4 workers are recommended.
 
 ## License
 

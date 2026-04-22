@@ -1,15 +1,16 @@
 ## 贡献者
-=======
 
 <a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" />
+  <img src="https://img.shields.io/github/contributors/lucas-sys/para_gsa_bw25?style=for-the-badge&logo=github" alt="贡献者人数"/>
+</a>
+
+<a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="贡献者头像" width="400"/>
 </a>
 
 # LCA 全局敏感性分析（GSA）工具包
 
 基于 [Brightway2.5](https://brightway.dev/)、[SALib](https://salib.readthedocs.io/) 和 Python 多进程的模块化 **参数扰动生命周期评价（LCA）** 与 **全局敏感性分析（GSA）** 工具包。
-
-
 
 该工具包基于Rebecca Belfiore、Christhel Andrade Diaz和刘威尔的工作开发。过程中使用了Code X来提高代码效率，使用WorkBuddy组织所有文件。
 
@@ -47,20 +48,12 @@
 │   ├── sensitivity_oat/              # OAT 敏感性结果
 │   ├── sensitivity_analytical/       # 解析方差结果
 │   ├── monte_carlo/                  # 蒙特卡洛结果
-<<<<<<< HEAD
-|   ├── sobol/                        # Sobol GSA 结果
-│   └── fast/                         # Fast GSA 结果
-├── gsa_workflow.ipynb                # 交互式 Notebook（完整工作流）
-├── init_databases.py                 # 数据库初始化脚本
-├── test_full_workflow.py             # 端到端测试
-├── test_run.py   c                    # 快速验证测试
-=======
-│   └── sobol/                        # Sobol GSA 结果
+│   ├── sobol/                        # Sobol GSA 结果
+│   └── fast/                         # FAST / RBD-FAST GSA 结果
 ├── gsa_workflow.ipynb                # 交互式 Notebook（完整工作流）
 ├── init_databases.py                 # 数据库初始化脚本
 ├── test_full_workflow.py             # 端到端测试
 ├── test_run.py                       # 快速验证测试
->>>>>>> 5859e69832468470c53411abd9c153917b11d491
 ├── test_sobol_only.py                # Sobol 专项测试
 ├── requirements.txt
 ├── LICENSE
@@ -232,7 +225,7 @@ result = lca_fast.run_full_fast_workflow(
 
 ### Jupyter Notebook
 
-打开 `gsa_workflow.ipynb` 并按顺序执行单元格。Notebook 覆盖了从数据库设置到 Sobol GSA 的完整工作流。运行前请更新配置单元格中的项目特定值。
+打开 `gsa_workflow.ipynb` 并按顺序执行单元格。Notebook 覆盖了从数据库设置到 Sobol 和 FAST GSA 的完整工作流。运行前请更新配置单元格中的项目特定值。
 
 ## 工作流章节
 
