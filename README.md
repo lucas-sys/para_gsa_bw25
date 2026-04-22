@@ -5,8 +5,10 @@
 </a>
 
 <a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="Contributors" width="400"/>
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="Contributors"/>
 </a>
+
+
 
 # LCA Global Sensitivity Analysis (GSA) Toolkit
 

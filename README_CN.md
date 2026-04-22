@@ -5,8 +5,9 @@
 </a>
 
 <a href="https://github.com/lucas-sys/para_gsa_bw25/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="贡献者头像" width="400"/>
+  <img src="https://contrib.rocks/image?repo=lucas-sys/para_gsa_bw25" alt="贡献者头像" />
 </a>
+
 
 # LCA 全局敏感性分析（GSA）工具包
 
