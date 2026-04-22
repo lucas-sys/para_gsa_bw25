@@ -36,7 +36,8 @@
 │   ├── sensitivity_oat/              # OAT 敏感性结果
 │   ├── sensitivity_analytical/       # 解析方差结果
 │   ├── monte_carlo/                  # 蒙特卡洛结果
-│   └── sobol/                        # Sobol GSA 结果
+|   ├── sobol/                        # Sobol GSA 结果
+│   └── fast/                         # Fast GSA 结果
 ├── gsa_workflow.ipynb                # 交互式 Notebook（完整工作流）
 ├── init_databases.py                 # 数据库初始化脚本
 ├── test_full_workflow.py             # 端到端测试
@@ -216,18 +217,18 @@ result = lca_fast.run_full_fast_workflow(
 
 ## 工作流章节
 
-| 章节  | 描述             | 输出目录                              |
-| --- | -------------- | --------------------------------- |
-| 0   | Brightway 项目设置 | --                                |
-| 1   | 影响类别选择         | --                                |
-| 2   | 功能单元选择         | --                                |
-| 3   | 确定性 LCA        | `results/deterministic/`          |
-| 4   | 贡献分析           | `results/contribution/`           |
-| 5   | OAT 敏感性        | `results/sensitivity_oat/`        |
-| 6   | 解析方差           | `results/sensitivity_analytical/` |
-| 7   | 蒙特卡洛模拟         | `results/monte_carlo/`            |
-| 8   | Sobol GSA      | `results/sobol/`                  |
-| 10  | FAST / RBD-FAST GSA | `results/fast/`              |
+| 章节  | 描述                  | 输出目录                              |
+| --- | ------------------- | --------------------------------- |
+| 0   | Brightway 项目设置      | --                                |
+| 1   | 影响类别选择              | --                                |
+| 2   | 功能单元选择              | --                                |
+| 3   | 确定性 LCA             | `results/deterministic/`          |
+| 4   | 贡献分析                | `results/contribution/`           |
+| 5   | OAT 敏感性             | `results/sensitivity_oat/`        |
+| 6   | 解析方差                | `results/sensitivity_analytical/` |
+| 7   | 蒙特卡洛模拟              | `results/monte_carlo/`            |
+| 8   | Sobol GSA           | `results/sobol/`                  |
+| 10  | FAST / RBD-FAST GSA | `results/fast/`                   |
 
 ## 支持的不确定性分布
 
@@ -248,33 +249,33 @@ result = lca_fast.run_full_fast_workflow(
 
 ## FAST / RBD-FAST GSA
 
-| 变体 | 函数 | 指数 | 样本量公式 | 说明 |
-|------|------|------|-----------|------|
-| 经典 FAST | `method='fast'` | S1 | `(4M²+1)·k` | 确定性，仅一阶，样本量低 |
-| RBD-FAST | `method='rbd_fast'` | S1 + ST | `≥65·k` | 随机，一阶+全阶，SALib 拉丁超立方采样 |
+| 变体       | 函数                  | 指数      | 样本量公式       | 说明                     |
+| -------- | ------------------- | ------- | ----------- | ---------------------- |
+| 经典 FAST  | `method='fast'`     | S1      | `(4M²+1)·k` | 确定性，仅一阶，样本量低           |
+| RBD-FAST | `method='rbd_fast'` | S1 + ST | `≥65·k`     | 随机，一阶+全阶，SALib 拉丁超立方采样 |
 
 其中 `k` = 不确定参数个数，`M` = 干扰因子（推荐默认值 4）。
 
 **与 Sobol 比较**
 
-| 方法 | 一阶 S1 | 全阶 ST | 最小推荐样本 | 适用场景 |
-|------|---------|---------|------------|---------|
-| Sobol | ✓ | ✓ | `N·(k+2)` | 标准全局 GSA |
-| 经典 FAST | ✓ | ✗ | `(4M²+1)·k` | 仅需 S1，样本预算紧 |
-| RBD-FAST | ✓ | ✓ | `65·k` | 样本量介于二者之间 |
+| 方法       | 一阶 S1 | 全阶 ST | 最小推荐样本      | 适用场景        |
+| -------- | ----- | ----- | ----------- | ----------- |
+| Sobol    | ✓     | ✓     | `N·(k+2)`   | 标准全局 GSA    |
+| 经典 FAST  | ✓     | ✗     | `(4M²+1)·k` | 仅需 S1，样本预算紧 |
+| RBD-FAST | ✓     | ✓     | `65·k`      | 样本量介于二者之间   |
 
 主要 API：
 
-| 函数 | 说明 |
-|------|------|
-| `build_fast_problem(group)` | 从 ActivityParameter 构建 SALib 问题字典 |
-| `sanitize_fast_problem(problem)` | 校验并修复非法参数边界 |
-| `generate_fast_samples(problem, M, method)` | 生成 FAST / RBD-FAST 样本矩阵 |
-| `expected_fast_sample_rows(problem, M, method)` | 预测样本行数 |
-| `run_parallel_fast_from_samples(...)` | 多进程评估样本矩阵 |
-| `fast_indices_from_results(...)` | 计算 FAST / RBD-FAST 灵敏度指数 |
-| `fast_indices_to_dataframe(Si, problem)` | 转为整洁 DataFrame |
-| `run_full_fast_workflow(...)` | 一键工作流（构建→采样→评估） |
+| 函数                                              | 说明                                |
+| ----------------------------------------------- | --------------------------------- |
+| `build_fast_problem(group)`                     | 从 ActivityParameter 构建 SALib 问题字典 |
+| `sanitize_fast_problem(problem)`                | 校验并修复非法参数边界                       |
+| `generate_fast_samples(problem, M, method)`     | 生成 FAST / RBD-FAST 样本矩阵           |
+| `expected_fast_sample_rows(problem, M, method)` | 预测样本行数                            |
+| `run_parallel_fast_from_samples(...)`           | 多进程评估样本矩阵                         |
+| `fast_indices_from_results(...)`                | 计算 FAST / RBD-FAST 灵敏度指数          |
+| `fast_indices_to_dataframe(Si, problem)`        | 转为整洁 DataFrame                    |
+| `run_full_fast_workflow(...)`                   | 一键工作流（构建→采样→评估）                   |
 
 ## 多进程
 

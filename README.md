@@ -34,7 +34,8 @@ A modular Python toolkit for performing **parameter-perturbation Life Cycle Asse
 │   ├── sensitivity_oat/
 │   ├── sensitivity_analytical/
 │   ├── monte_carlo/
-│   └── sobol/
+│   ├── sobol/
+|   └── fast/
 ├── gsa_workflow.ipynb                # Interactive notebook (full workflow)
 ├── init_databases.py                 # Database initialization script
 ├── test_full_workflow.py             # End-to-end test
