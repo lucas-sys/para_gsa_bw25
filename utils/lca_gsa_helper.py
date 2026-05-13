@@ -116,7 +116,6 @@ from utils.lca_fast import (                               # noqa: F401
 )
 
 # -- Standard library re-exports (for compatibility) ---------------------------
-from __future__ import annotations
 import math                                         # noqa: F401
 import multiprocessing as mp                         # noqa: F401
 import os                                           # noqa: F401
